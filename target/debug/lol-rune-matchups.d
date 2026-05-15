@@ -1,1 +1,0 @@
-C:\repos\lol-rune-matchups\target\debug\lol-rune-matchups.exe: C:\repos\lol-rune-matchups\migrations\001_init.sql C:\repos\lol-rune-matchups\migrations\002_remove_patch.sql C:\repos\lol-rune-matchups\src\main.rs

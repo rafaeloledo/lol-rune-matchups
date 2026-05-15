@@ -49,25 +49,168 @@ function updateRuneDatalists() {
   fillDatalist("secondary-minors-data", secondaryTree ? secondaryTree.slots.flat() : []);
 }
 
-function handleTabComplete(event) {
-  if (event.key !== "Tab" || event.shiftKey) return;
-  const input = event.currentTarget;
-  const listId = input.getAttribute("list");
-  if (!listId) return;
+const combobox = {
+  popup: document.getElementById("combobox-popup"),
+  input: null,
+  options: [],
+  filtered: [],
+  active: 0,
+};
+
+function comboboxValues(input) {
+  const listId = input.dataset.list;
+  if (!listId) return [];
   const datalist = document.getElementById(listId);
-  if (!datalist) return;
-  const options = Array.from(datalist.options, (o) => o.value);
-  const query = input.value.trim().toLowerCase();
-  if (!query) return;
-  if (options.some((o) => o.toLowerCase() === query)) return;
-  const match =
-    options.find((o) => o.toLowerCase().startsWith(query)) ??
-    options.find((o) => o.toLowerCase().includes(query));
-  if (!match) return;
-  input.value = match;
+  if (!datalist) return [];
+  return Array.from(datalist.options, (o) => o.value);
+}
+
+function scoreOption(option, query) {
+  const lower = option.toLowerCase();
+  if (!query) return { score: 0, index: 0 };
+  if (lower === query) return { score: 0, index: 0 };
+  if (lower.startsWith(query)) return { score: 1, index: 0 };
+  const i = lower.indexOf(query);
+  if (i >= 0) return { score: 2, index: i };
+  return null;
+}
+
+function filterOptions(options, query) {
+  const q = query.trim().toLowerCase();
+  if (!q) return options.map((value) => ({ value, match: null }));
+  const scored = [];
+  for (const value of options) {
+    const s = scoreOption(value, q);
+    if (s) scored.push({ value, score: s.score, index: s.index });
+  }
+  scored.sort((a, b) => a.score - b.score || a.index - b.index || a.value.localeCompare(b.value));
+  return scored.map(({ value, index }) => ({
+    value,
+    match: q && index >= 0 ? { start: index, end: index + q.length } : null,
+  }));
+}
+
+function renderCombobox() {
+  combobox.popup.replaceChildren();
+  if (!combobox.filtered.length) {
+    const empty = document.createElement("div");
+    empty.className = "combobox-empty";
+    empty.textContent = "Sem resultados";
+    combobox.popup.append(empty);
+    return;
+  }
+  combobox.filtered.forEach(({ value, match }, idx) => {
+    const item = document.createElement("div");
+    item.className = "combobox-item" + (idx === combobox.active ? " active" : "");
+    item.setAttribute("role", "option");
+    item.dataset.index = String(idx);
+    if (match) {
+      item.append(
+        document.createTextNode(value.slice(0, match.start)),
+      );
+      const mark = document.createElement("mark");
+      mark.textContent = value.slice(match.start, match.end);
+      item.append(mark);
+      item.append(document.createTextNode(value.slice(match.end)));
+    } else {
+      item.textContent = value;
+    }
+    combobox.popup.append(item);
+  });
+}
+
+function positionCombobox() {
+  if (!combobox.input) return;
+  const rect = combobox.input.getBoundingClientRect();
+  combobox.popup.style.top = `${rect.bottom + window.scrollY + 4}px`;
+  combobox.popup.style.left = `${rect.left + window.scrollX}px`;
+  combobox.popup.style.minWidth = `${rect.width}px`;
+}
+
+function openCombobox(input) {
+  combobox.input = input;
+  combobox.options = comboboxValues(input);
+  refreshCombobox();
+  combobox.popup.hidden = false;
+  positionCombobox();
+}
+
+function refreshCombobox() {
+  if (!combobox.input) return;
+  combobox.filtered = filterOptions(combobox.options, combobox.input.value);
+  combobox.active = 0;
+  renderCombobox();
+}
+
+function closeCombobox() {
+  combobox.popup.hidden = true;
+  combobox.input = null;
+}
+
+function commitCombobox(idx) {
+  if (!combobox.input) return false;
+  const target = combobox.filtered[idx ?? combobox.active];
+  if (!target) return false;
+  const input = combobox.input;
+  input.value = target.value;
   input.dispatchEvent(new Event("input", { bubbles: true }));
   input.dispatchEvent(new Event("change", { bubbles: true }));
+  closeCombobox();
+  return true;
 }
+
+function moveActive(delta) {
+  if (!combobox.filtered.length) return;
+  combobox.active = (combobox.active + delta + combobox.filtered.length) % combobox.filtered.length;
+  renderCombobox();
+  const activeEl = combobox.popup.querySelector(".combobox-item.active");
+  if (activeEl) activeEl.scrollIntoView({ block: "nearest" });
+}
+
+function attachCombobox(input) {
+  input.addEventListener("focus", () => openCombobox(input));
+  input.addEventListener("input", () => {
+    if (combobox.input !== input) openCombobox(input);
+    else refreshCombobox();
+  });
+  input.addEventListener("blur", () => {
+    setTimeout(() => {
+      if (combobox.input === input) closeCombobox();
+    }, 120);
+  });
+  input.addEventListener("keydown", (event) => {
+    if (combobox.input !== input) return;
+    switch (event.key) {
+      case "ArrowDown":
+        event.preventDefault();
+        moveActive(1);
+        break;
+      case "ArrowUp":
+        event.preventDefault();
+        moveActive(-1);
+        break;
+      case "Enter":
+        if (commitCombobox()) event.preventDefault();
+        break;
+      case "Tab":
+        if (!event.shiftKey) commitCombobox();
+        break;
+      case "Escape":
+        closeCombobox();
+        break;
+    }
+  });
+}
+
+combobox.popup.addEventListener("mousedown", (event) => {
+  const item = event.target.closest(".combobox-item");
+  if (!item) return;
+  event.preventDefault();
+  commitCombobox(Number(item.dataset.index));
+});
+
+window.addEventListener("scroll", positionCombobox, true);
+window.addEventListener("resize", positionCombobox);
 
 function runeGroupValues(group) {
   return Array.from(form.querySelectorAll(`input[data-rune-group="${group}"]`), (el) => el.value);
@@ -218,13 +361,15 @@ async function loadEnums() {
   fillDatalist("shards-data", data.shardPresets);
 
   for (const treeInput of form.querySelectorAll('input[name$="_tree"]')) {
-    treeInput.addEventListener("change", updateRuneDatalists);
-    treeInput.addEventListener("input", updateRuneDatalists);
+    treeInput.addEventListener("change", () => {
+      updateRuneDatalists();
+      if (combobox.input && combobox.input.closest("[data-rune-group]")) refreshCombobox();
+    });
   }
   updateRuneDatalists();
 
-  for (const input of document.querySelectorAll("input[list]")) {
-    input.addEventListener("keydown", handleTabComplete);
+  for (const input of document.querySelectorAll("input[data-list]")) {
+    attachCombobox(input);
   }
 }
 

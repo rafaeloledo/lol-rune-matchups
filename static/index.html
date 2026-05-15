@@ -19,15 +19,15 @@
           <form id="filters" class="filters">
             <label>
               Campeao
-              <input name="champion" list="champions-data" placeholder="Todos" autocomplete="off" />
+              <input name="champion" data-list="champions-data" placeholder="Todos" autocomplete="off" />
             </label>
             <label>
               Oponente
-              <input name="opponent" list="champions-data" placeholder="Todos" autocomplete="off" />
+              <input name="opponent" data-list="champions-data" placeholder="Todos" autocomplete="off" />
             </label>
             <label>
               Rota
-              <input name="lane" list="lanes-data" placeholder="Todas" autocomplete="off" />
+              <input name="lane" data-list="lanes-data" placeholder="Todas" autocomplete="off" />
             </label>
           </form>
 
@@ -54,46 +54,46 @@
             <div class="field-grid">
               <label>
                 Campeao
-                <input name="champion" required list="champions-data" placeholder="Escolher campeao" autocomplete="off" />
+                <input name="champion" required data-list="champions-data" placeholder="Escolher campeao" autocomplete="off" />
               </label>
               <label>
                 Contra
-                <input name="opponent" required list="champions-data" placeholder="Escolher oponente" autocomplete="off" />
+                <input name="opponent" required data-list="champions-data" placeholder="Escolher oponente" autocomplete="off" />
               </label>
               <label>
                 Rota
-                <input name="lane" required list="lanes-data" placeholder="Escolher rota" autocomplete="off" />
+                <input name="lane" required data-list="lanes-data" placeholder="Escolher rota" autocomplete="off" />
               </label>
             </div>
 
             <div class="field-grid">
               <label>
                 Arvore primaria
-                <input name="primary_tree" required list="trees-data" placeholder="Arvore primaria" autocomplete="off" />
+                <input name="primary_tree" required data-list="trees-data" placeholder="Arvore primaria" autocomplete="off" />
               </label>
               <label>
                 Runas primarias
                 <input type="hidden" name="primary_runes" />
-                <input required data-rune-group="primary" data-rune-slot="keystone" list="primary-keystone-data" placeholder="Keystone" autocomplete="off" />
-                <input required data-rune-group="primary" data-rune-slot="minor" list="primary-minor-0-data" placeholder="Slot 1" autocomplete="off" />
-                <input required data-rune-group="primary" data-rune-slot="minor" list="primary-minor-1-data" placeholder="Slot 2" autocomplete="off" />
-                <input required data-rune-group="primary" data-rune-slot="minor" list="primary-minor-2-data" placeholder="Slot 3" autocomplete="off" />
+                <input required data-rune-group="primary" data-rune-slot="keystone" data-list="primary-keystone-data" placeholder="Keystone" autocomplete="off" />
+                <input required data-rune-group="primary" data-rune-slot="minor" data-list="primary-minor-0-data" placeholder="Slot 1" autocomplete="off" />
+                <input required data-rune-group="primary" data-rune-slot="minor" data-list="primary-minor-1-data" placeholder="Slot 2" autocomplete="off" />
+                <input required data-rune-group="primary" data-rune-slot="minor" data-list="primary-minor-2-data" placeholder="Slot 3" autocomplete="off" />
               </label>
               <label>
                 Arvore secundaria
-                <input name="secondary_tree" required list="trees-data" placeholder="Arvore secundaria" autocomplete="off" />
+                <input name="secondary_tree" required data-list="trees-data" placeholder="Arvore secundaria" autocomplete="off" />
               </label>
               <label>
                 Runas secundarias
                 <input type="hidden" name="secondary_runes" />
-                <input required data-rune-group="secondary" data-rune-slot="minor" list="secondary-minors-data" placeholder="Runa secundaria 1" autocomplete="off" />
-                <input required data-rune-group="secondary" data-rune-slot="minor" list="secondary-minors-data" placeholder="Runa secundaria 2" autocomplete="off" />
+                <input required data-rune-group="secondary" data-rune-slot="minor" data-list="secondary-minors-data" placeholder="Runa secundaria 1" autocomplete="off" />
+                <input required data-rune-group="secondary" data-rune-slot="minor" data-list="secondary-minors-data" placeholder="Runa secundaria 2" autocomplete="off" />
               </label>
             </div>
 
             <label>
               Fragmentos
-              <input name="shards" required list="shards-data" placeholder="Escolher fragmentos" autocomplete="off" />
+              <input name="shards" required data-list="shards-data" placeholder="Escolher fragmentos" autocomplete="off" />
             </label>
 
             <div class="field-grid compact">
@@ -148,6 +148,7 @@
     <datalist id="primary-minor-1-data"></datalist>
     <datalist id="primary-minor-2-data"></datalist>
     <datalist id="secondary-minors-data"></datalist>
+    <div id="combobox-popup" class="combobox-popup" hidden role="listbox"></div>
     <script src="/app.js"></script>
   </body>
 </html>
