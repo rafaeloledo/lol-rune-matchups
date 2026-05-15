@@ -1,0 +1,13 @@
+C:\lol-rune-matchups\target\debug\deps\sha2-14aed8f058c01b21.d: C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\lib.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\core_api.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha256.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha512.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\consts.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha256\soft.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha256\x86.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha512\soft.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha512\x86.rs
+
+C:\lol-rune-matchups\target\debug\deps\libsha2-14aed8f058c01b21.rmeta: C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\lib.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\core_api.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha256.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha512.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\consts.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha256\soft.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha256\x86.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha512\soft.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha512\x86.rs
+
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\lib.rs:
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\core_api.rs:
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha256.rs:
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha512.rs:
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\consts.rs:
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha256\soft.rs:
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha256\x86.rs:
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha512\soft.rs:
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha2-0.10.9\src\sha512\x86.rs:

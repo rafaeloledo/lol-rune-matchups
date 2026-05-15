@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LoL Rune Matchups</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <meta http-equiv="Cache-Control" content="no-store" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="workspace">
+        <aside class="sidebar">
+          <div>
+            <p class="eyebrow">Base pessoal</p>
+            <h1>Runas por matchup</h1>
+          </div>
+
+          <form id="filters" class="filters">
+            <label>
+              Campeao
+              <input name="champion" list="champions-data" placeholder="Todos" autocomplete="off" />
+            </label>
+            <label>
+              Oponente
+              <input name="opponent" list="champions-data" placeholder="Todos" autocomplete="off" />
+            </label>
+            <label>
+              Rota
+              <input name="lane" list="lanes-data" placeholder="Todas" autocomplete="off" />
+            </label>
+          </form>
+
+          <div class="stat-grid">
+            <div>
+              <strong id="total">0</strong>
+              <span>matchups</span>
+            </div>
+            <div>
+              <strong id="avgWinrate">0%</strong>
+              <span>winrate</span>
+            </div>
+          </div>
+        </aside>
+
+        <section class="content">
+          <form id="matchupForm" class="editor">
+            <input type="hidden" name="id" />
+            <div class="form-head">
+              <h2 id="formTitle">Nova entrada</h2>
+              <button type="button" id="resetButton" class="ghost">Limpar</button>
+            </div>
+
+            <div class="field-grid">
+              <label>
+                Campeao
+                <input name="champion" required list="champions-data" placeholder="Escolher campeao" autocomplete="off" />
+              </label>
+              <label>
+                Contra
+                <input name="opponent" required list="champions-data" placeholder="Escolher oponente" autocomplete="off" />
+              </label>
+              <label>
+                Rota
+                <input name="lane" required list="lanes-data" placeholder="Escolher rota" autocomplete="off" />
+              </label>
+            </div>
+
+            <div class="field-grid">
+              <label>
+                Arvore primaria
+                <input name="primary_tree" required list="trees-data" placeholder="Arvore primaria" autocomplete="off" />
+              </label>
+              <label>
+                Runas primarias
+                <input type="hidden" name="primary_runes" />
+                <input required data-rune-group="primary" data-rune-slot="keystone" list="primary-keystone-data" placeholder="Keystone" autocomplete="off" />
+                <input required data-rune-group="primary" data-rune-slot="minor" list="primary-minor-0-data" placeholder="Slot 1" autocomplete="off" />
+                <input required data-rune-group="primary" data-rune-slot="minor" list="primary-minor-1-data" placeholder="Slot 2" autocomplete="off" />
+                <input required data-rune-group="primary" data-rune-slot="minor" list="primary-minor-2-data" placeholder="Slot 3" autocomplete="off" />
+              </label>
+              <label>
+                Arvore secundaria
+                <input name="secondary_tree" required list="trees-data" placeholder="Arvore secundaria" autocomplete="off" />
+              </label>
+              <label>
+                Runas secundarias
+                <input type="hidden" name="secondary_runes" />
+                <input required data-rune-group="secondary" data-rune-slot="minor" list="secondary-minors-data" placeholder="Runa secundaria 1" autocomplete="off" />
+                <input required data-rune-group="secondary" data-rune-slot="minor" list="secondary-minors-data" placeholder="Runa secundaria 2" autocomplete="off" />
+              </label>
+            </div>
+
+            <label>
+              Fragmentos
+              <input name="shards" required list="shards-data" placeholder="Escolher fragmentos" autocomplete="off" />
+            </label>
+
+            <div class="field-grid compact">
+              <label>Jogos<input name="games_played" type="number" min="0" value="0" /></label>
+              <label>Vitorias<input name="wins" type="number" min="0" value="0" /></label>
+              <label>Confianca<input name="confidence" type="range" min="1" max="5" value="3" /></label>
+            </div>
+
+            <label>Notas<textarea name="notes" rows="4" placeholder="O que funcionou, janela de troca, primeiro recall, spikes..."></textarea></label>
+
+            <button type="submit" class="primary">Salvar matchup</button>
+          </form>
+
+          <section>
+            <div class="list-head">
+              <h2>Entradas</h2>
+              <span id="status"></span>
+            </div>
+            <div id="matchupList" class="matchup-list"></div>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <template id="matchupTemplate">
+      <article class="matchup">
+        <div class="matchup-top">
+          <div>
+            <h3></h3>
+            <p class="meta"></p>
+          </div>
+          <div class="actions">
+            <button type="button" data-action="edit">Editar</button>
+            <button type="button" data-action="delete" class="danger">Excluir</button>
+          </div>
+        </div>
+        <dl>
+          <div><dt>Primaria</dt><dd data-field="primary"></dd></div>
+          <div><dt>Secundaria</dt><dd data-field="secondary"></dd></div>
+          <div><dt>Fragmentos</dt><dd data-field="shards"></dd></div>
+        </dl>
+        <p class="notes"></p>
+      </article>
+    </template>
+
+    <datalist id="champions-data"></datalist>
+    <datalist id="lanes-data"></datalist>
+    <datalist id="trees-data"></datalist>
+    <datalist id="shards-data"></datalist>
+    <datalist id="primary-keystone-data"></datalist>
+    <datalist id="primary-minor-0-data"></datalist>
+    <datalist id="primary-minor-1-data"></datalist>
+    <datalist id="primary-minor-2-data"></datalist>
+    <datalist id="secondary-minors-data"></datalist>
+    <script src="/app.js"></script>
+  </body>
+</html>

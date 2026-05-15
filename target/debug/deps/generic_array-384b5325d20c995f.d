@@ -1,0 +1,11 @@
+C:\lol-rune-matchups\target\debug\deps\generic_array-384b5325d20c995f.d: C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\lib.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\hex.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\impls.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\arr.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\functional.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\iter.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\sequence.rs
+
+C:\lol-rune-matchups\target\debug\deps\libgeneric_array-384b5325d20c995f.rmeta: C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\lib.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\hex.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\impls.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\arr.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\functional.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\iter.rs C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\sequence.rs
+
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\lib.rs:
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\hex.rs:
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\impls.rs:
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\arr.rs:
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\functional.rs:
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\iter.rs:
+C:\Users\rafael\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\generic-array-0.14.7\src\sequence.rs:

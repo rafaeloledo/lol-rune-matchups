@@ -1,0 +1,1 @@
+cargo:rustc-env=MIME_TYPES_GENERATED_PATH=C:\lol-rune-matchups\target\debug\build\mime_guess-39714c322ce38d2b\out\mime_types_generated.rs
