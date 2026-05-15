@@ -12,18 +12,18 @@ Aplicativo local para organizar runas testadas por matchup de League of Legends.
 
 ## Como rodar
 
-Pre-requisitos: Rust (+ Cargo) e Node.js 18+ (so para compilar o frontend TypeScript).
+Pre-requisitos: Rust (+ Cargo) e Node.js 18+ (so para compilar o frontend TypeScript + Tailwind).
 
 ```powershell
-npm install       # instala o TypeScript (devDependency)
-npm run build     # compila frontend/src/*.ts -> static/js/*.js
+npm install       # instala typescript, tailwindcss, npm-run-all
+npm run build     # compila TS -> static/js e Tailwind -> static/styles.css
 cargo run         # sobe o servidor Rust em 127.0.0.1:8080
 ```
 
 Para iterar no frontend sem recompilar a cada save, em um terminal separado:
 
 ```powershell
-npm run watch     # tsc --watch
+npm run watch     # roda tsc --watch e tailwindcss --watch em paralelo
 ```
 
 Abra:
@@ -83,7 +83,8 @@ SQLite em data/runes.db
   2. Expoe a API REST de matchups (`/api/matchups`) com CRUD completo.
   3. Expoe `/api/enums`, que devolve em JSON todos os valores validos: lista de campeoes, rotas, arvores de runas (com keystone + 3 slots), todos os shards/fragmentos.
 - **Banco de dados**: SQLite criado/migrado na primeira execucao. As migrations vivem em `migrations/` e rodam via `sqlx::migrate!`.
-- **Frontend**: TypeScript com `strict: true` em [`frontend/src/`](frontend/src/), compilado pelo `tsc` para ES modules em `static/js/`. Sem bundler — o browser carrega via `<script type="module" src="/js/main.js">` e resolve os imports nativamente. Tipos compartilhados ([`types.ts`](frontend/src/types.ts)) garantem que os payloads JSON casem com o que o Rust emite.
+- **Frontend (logica)**: TypeScript com `strict: true` em [`frontend/src/`](frontend/src/), compilado pelo `tsc` para ES modules em `static/js/`. Sem bundler — o browser carrega via `<script type="module" src="/js/main.js">` e resolve os imports nativamente. Tipos compartilhados ([`types.ts`](frontend/src/types.ts)) garantem que os payloads JSON casem com o que o Rust emite.
+- **Frontend (estilo)**: [Tailwind CSS](https://tailwindcss.com) v3 compila [`frontend/styles.css`](frontend/styles.css) para `static/styles.css`. A paleta cream/parchment/gold do projeto vive em [`tailwind.config.js`](tailwind.config.js) como `theme.extend.colors` (`parchment-50/100/200/...`, `gold-400/500`, `ink`, `accent-primary` etc.). Componentes que precisam de classe nomeada (`.combobox-popup`, `.matchup`, `.btn-primary` — usados dinamicamente pelo TS ou compartilhados entre paginas) ficam em `@layer components` com `@apply` de utilities. Tudo o que e layout pontual vai como utility direto em `index.html`.
 
 ### Fonte unica de verdade
 
@@ -118,7 +119,7 @@ Os datalists das runas primarias sao re-populados sempre que o input "Arvore pri
 
 ### Fluxo tipico de uso
 
-1. `npm run build` compila `frontend/src/*.ts` para `static/js/*.js` (modulos ES).
+1. `npm run build` compila `frontend/src/*.ts` para `static/js/*.js` (modulos ES) e `frontend/styles.css` (com diretivas do Tailwind) para `static/styles.css`.
 2. `cargo run` sobe o servidor Rust e roda migrations.
 3. O browser carrega `index.html`, que tem `<script type="module" src="/js/main.js">`. O browser resolve os imports relativos (`./api.js`, `./combobox.js`, etc.) nativamente.
 4. `main.ts` faz `GET /api/enums` e popula todos os datalists.
@@ -138,8 +139,10 @@ Os datalists das runas primarias sao re-populados sempre que o input "Arvore pri
 - [`frontend/src/types.ts`](frontend/src/types.ts) — `Matchup`, `EnumsResponse`, `RuneTree`, `MatchupInput` etc.
 - [`frontend/src/dom.ts`](frontend/src/dom.ts) — helpers `$`, `$byId`, `$all`, `fillDatalist`.
 - [`frontend/tsconfig.json`](frontend/tsconfig.json) — config do TypeScript (target ES2022, strict, outDir `../static/js`).
-- [`package.json`](package.json) — scripts `build` e `watch`, dependencia unica `typescript`.
-- [`static/styles.css`](static/styles.css) — visual, incluindo a estilizacao do combobox.
+- [`frontend/styles.css`](frontend/styles.css) — entrada do Tailwind (`@tailwind base/components/utilities` + `@layer components` com `@apply` para classes nomeadas).
+- [`tailwind.config.js`](tailwind.config.js) — paleta custom + `content` apontando para `index.html` e `frontend/src/**/*.ts` (para Tailwind detectar classes usadas dinamicamente).
+- [`package.json`](package.json) — scripts `build` (tsc + tailwind), `watch` (ambos em paralelo via npm-run-all).
+- `static/styles.css` (build artifact, gitignored) — Tailwind compilado, servido pelo Rust.
 - [`migrations/`](migrations/) — schema do SQLite.
 
 ## Sobre integracao com League of Legends

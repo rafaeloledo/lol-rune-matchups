@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    @apply font-sans bg-parchment-100 text-ink m-0;
+  }
+
+  h1,
+  h2,
+  h3,
+  p {
+    @apply mt-0;
+  }
+
+  input,
+  select,
+  textarea {
+    @apply w-full border border-[#c8d0d9] rounded-md px-3 py-2.5 bg-white text-[#1e293b];
+    font: inherit;
+  }
+
+  textarea {
+    @apply resize-y;
+  }
+
+  label {
+    @apply flex flex-col gap-1.5 text-ink-soft text-[0.82rem] font-bold;
+  }
+}
+
+@layer components {
+  /* High-level page chrome ---------------------------------------------- */
+  .shell {
+    @apply min-h-screen p-6;
+  }
+
+  .workspace {
+    @apply grid gap-6 mx-auto;
+    grid-template-columns: 300px minmax(0, 1fr);
+    max-width: 1420px;
+  }
+
+  .sidebar {
+    @apply bg-parchment-50 border border-parchment-300 rounded-lg shadow-panel
+           sticky top-6 p-6 flex flex-col gap-6;
+    height: calc(100vh - 48px);
+  }
+
+  .eyebrow {
+    @apply mb-1.5 text-gold-500 text-[0.78rem] font-extrabold uppercase tracking-wide;
+  }
+
+  .content {
+    @apply flex flex-col gap-4;
+  }
+
+  .filters {
+    @apply flex flex-col gap-4;
+  }
+
+  /* Editor and form ---------------------------------------------------- */
+  .editor {
+    @apply bg-parchment-50 border border-parchment-300 rounded-lg shadow-panel
+           p-5 flex flex-col gap-4;
+  }
+
+  .form-head,
+  .list-head,
+  .matchup-top,
+  .actions {
+    @apply flex items-center;
+  }
+
+  .form-head,
+  .list-head,
+  .matchup-top {
+    @apply justify-between gap-3.5;
+  }
+
+  .field-grid {
+    @apply grid grid-cols-2 gap-3;
+  }
+
+  .field-grid.compact {
+    @apply grid-cols-3;
+  }
+
+  .stat-grid {
+    @apply grid grid-cols-2 gap-3;
+  }
+
+  .stat-grid > div {
+    @apply border border-parchment-300 rounded-lg p-3.5 bg-white;
+  }
+
+  .stat-grid strong {
+    @apply block text-[1.55rem];
+  }
+
+  .stat-grid span {
+    @apply text-ink-muted text-[0.82rem];
+  }
+
+  /* Buttons ------------------------------------------------------------ */
+  .btn {
+    @apply rounded-md cursor-pointer px-3.5 py-2.5 bg-[#e2e8f0] text-[#18202c]
+           border-0;
+    font: inherit;
+  }
+
+  .btn-primary {
+    @apply btn bg-accent-primary text-white font-extrabold;
+  }
+
+  .btn-ghost {
+    @apply btn bg-transparent border border-[#c8d0d9];
+  }
+
+  .btn-danger {
+    @apply btn bg-accent-danger text-accent-dangerInk;
+  }
+
+  /* Matchup list and cards -------------------------------------------- */
+  .matchup-list {
+    @apply grid gap-4;
+    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  }
+
+  .matchup {
+    @apply bg-parchment-50 border border-parchment-300 rounded-lg shadow-panel p-4;
+  }
+
+  .matchup h3 {
+    @apply mb-1;
+  }
+
+  .matchup-top .actions {
+    @apply gap-2;
+  }
+
+  .meta,
+  .notes,
+  #status {
+    @apply text-ink-muted;
+  }
+
+  .matchup dl {
+    @apply grid gap-2.5 my-4;
+  }
+
+  .matchup dt {
+    @apply text-gold-500 text-[0.72rem] font-black uppercase tracking-wide;
+  }
+
+  .matchup dd {
+    @apply mt-0.5;
+  }
+
+  .matchup .notes {
+    @apply mb-0 whitespace-pre-wrap;
+  }
+
+  /* Combobox popup (classes created dynamically by combobox.ts) -------- */
+  .combobox-popup {
+    @apply absolute z-[1000] bg-white border border-gold-400 rounded-xl shadow-popup
+           p-1.5 overflow-y-auto text-[0.95rem];
+    max-height: 280px;
+    min-width: 220px;
+  }
+
+  .combobox-popup[hidden] {
+    @apply hidden;
+  }
+
+  .combobox-item {
+    @apply px-3 py-2 rounded-md cursor-pointer text-ink whitespace-nowrap
+           overflow-hidden text-ellipsis leading-tight;
+  }
+
+  .combobox-item + .combobox-item {
+    @apply mt-0.5;
+  }
+
+  .combobox-item:hover {
+    @apply bg-parchment-200;
+  }
+
+  .combobox-item.active {
+    @apply bg-gold-400 text-ink-gold;
+  }
+
+  .combobox-item mark {
+    @apply bg-transparent font-bold underline underline-offset-2;
+    color: inherit;
+  }
+
+  .combobox-empty {
+    @apply px-3 py-2.5 text-[#8a7e6a] italic text-[0.88rem];
+  }
+
+  .combobox-popup::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .combobox-popup::-webkit-scrollbar-thumb {
+    @apply bg-parchment-400 rounded-md;
+  }
+
+  .combobox-popup::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* Responsive layout ---------------------------------------------------- */
+@media (max-width: 860px) {
+  .shell {
+    @apply p-3.5;
+  }
+
+  .workspace,
+  .field-grid,
+  .field-grid.compact {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    @apply static h-auto;
+  }
+
+  .matchup-top {
+    @apply items-start flex-col;
+  }
+}

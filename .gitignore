@@ -3,4 +3,5 @@ data/
 *.log
 node_modules/
 static/js/
+static/styles.css
 *.tsbuildinfo
