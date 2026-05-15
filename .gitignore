@@ -1,3 +1,6 @@
 target/
 data/
 *.log
+node_modules/
+static/js/
+*.tsbuildinfo

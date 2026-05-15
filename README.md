@@ -12,10 +12,18 @@ Aplicativo local para organizar runas testadas por matchup de League of Legends.
 
 ## Como rodar
 
-Instale Rust e Cargo. Depois, dentro desta pasta:
+Pre-requisitos: Rust (+ Cargo) e Node.js 18+ (so para compilar o frontend TypeScript).
 
 ```powershell
-cargo run
+npm install       # instala o TypeScript (devDependency)
+npm run build     # compila frontend/src/*.ts -> static/js/*.js
+cargo run         # sobe o servidor Rust em 127.0.0.1:8080
+```
+
+Para iterar no frontend sem recompilar a cada save, em um terminal separado:
+
+```powershell
+npm run watch     # tsc --watch
 ```
 
 Abra:
@@ -56,12 +64,12 @@ Exemplo de payload:
 
 ## How this project is working
 
-Este projeto e uma aplicacao web local de uma maquina so, sem build step e sem framework de frontend. Tudo gira em torno de tres pecas: um servidor Rust, um SQLite no disco e um frontend estatico servido pelo mesmo binario.
+Este projeto e uma aplicacao web local de uma maquina so, sem framework de frontend. Tres pecas: um servidor Rust, um SQLite no disco e um frontend em TypeScript que compila para modulos ES nativos servidos pelo mesmo binario.
 
 ### Arquitetura em alto nivel
 
 ```
-Browser (HTML + CSS + JS vanilla)
+Browser (HTML + CSS + ES modules compilados de TypeScript)
         |  fetch JSON
         v
 Servidor Axum em 127.0.0.1:8080
@@ -71,11 +79,11 @@ SQLite em data/runes.db
 ```
 
 - **Backend**: um unico binario Rust ([`src/main.rs`](src/main.rs)) construido com [`axum`](https://github.com/tokio-rs/axum) e [`sqlx`](https://github.com/launchbadge/sqlx). Ele faz tres coisas:
-  1. Serve os arquivos estaticos da pasta `static/` (HTML, CSS, JS).
+  1. Serve os arquivos estaticos da pasta `static/` (HTML, CSS, JS compilado em `static/js/`).
   2. Expoe a API REST de matchups (`/api/matchups`) com CRUD completo.
   3. Expoe `/api/enums`, que devolve em JSON todos os valores validos: lista de campeoes, rotas, arvores de runas (com keystone + 3 slots), todos os shards/fragmentos.
 - **Banco de dados**: SQLite criado/migrado na primeira execucao. As migrations vivem em `migrations/` e rodam via `sqlx::migrate!`.
-- **Frontend**: HTML + CSS + JS sem bundler. O JS faz `fetch('/api/enums')` para preencher os campos e nunca duplica listas de dados — a unica fonte de verdade e o Rust.
+- **Frontend**: TypeScript com `strict: true` em [`frontend/src/`](frontend/src/), compilado pelo `tsc` para ES modules em `static/js/`. Sem bundler — o browser carrega via `<script type="module" src="/js/main.js">` e resolve os imports nativamente. Tipos compartilhados ([`types.ts`](frontend/src/types.ts)) garantem que os payloads JSON casem com o que o Rust emite.
 
 ### Fonte unica de verdade
 
@@ -99,28 +107,38 @@ Erros voltam como `400` com `{"error":"..."}`. O cliente exibe a mensagem na bar
 
 ### O combobox customizado
 
-A descoberta na UI usa um combobox proprio (nao o `<datalist>` nativo, que nao aceita CSS). Cada `<input data-list="...">` esta vinculado a um `<datalist>` escondido apenas como fonte de dados. Ao focar o input, o JS:
+A descoberta na UI usa um combobox proprio (nao o `<datalist>` nativo, que nao aceita CSS). Cada `<input data-list="...">` esta vinculado a um `<datalist>` escondido apenas como fonte de dados. O combobox e implementado como uma classe `ComboboxController` em [`combobox.ts`](frontend/src/combobox.ts), tipada com a interface `ComboboxItem`. Ao focar o input:
 
 1. Le os valores do datalist correspondente.
 2. Filtra por substring case-insensitive, ordenando por prefix-match > substring-match > posicao.
 3. Renderiza um popup `.combobox-popup` posicionado abaixo do input, com a porcao que casou destacada via `<mark>`.
 4. Aceita navegacao por **Setas ↑/↓**, commit por **Enter** ou **Tab**, fechamento por **Esc**, e clique do mouse.
 
-Os datalists das runas primarias sao re-populados sempre que o input "Arvore primaria"/"secundaria" muda, garantindo que cada slot mostre apenas as runas validas daquele slot daquela arvore.
+Os datalists das runas primarias sao re-populados sempre que o input "Arvore primaria"/"secundaria" muda (logica em [`form.ts`](frontend/src/form.ts)), garantindo que cada slot mostre apenas as runas validas daquele slot daquela arvore.
 
 ### Fluxo tipico de uso
 
-1. `cargo run` sobe o servidor e roda migrations.
-2. O browser carrega `index.html`, executa `app.js`, faz `GET /api/enums` e popula todos os datalists.
-3. O usuario digita "Ja" no campo Campeao, ve sugestoes (Janna, Jarvan IV, Jax, Jayce) destacando "Ja", aperta Tab/Enter e o valor e fixado.
-4. Ao salvar, o cliente monta o payload, manda `POST /api/matchups`, o servidor valida contra os enums, persiste no SQLite e devolve a entrada criada com `id` + timestamps.
-5. O cliente recarrega a lista e mostra a nova entrada.
+1. `npm run build` compila `frontend/src/*.ts` para `static/js/*.js` (modulos ES).
+2. `cargo run` sobe o servidor Rust e roda migrations.
+3. O browser carrega `index.html`, que tem `<script type="module" src="/js/main.js">`. O browser resolve os imports relativos (`./api.js`, `./combobox.js`, etc.) nativamente.
+4. `main.ts` faz `GET /api/enums` e popula todos os datalists.
+5. O usuario digita "Ja" no campo Campeao, ve sugestoes (Janna, Jarvan IV, Jax, Jayce) destacando "Ja", aperta Tab/Enter e o valor e fixado.
+6. Ao salvar, o cliente monta o payload em `readForm()` (`form.ts`), manda `POST /api/matchups`, o servidor valida contra os enums, persiste no SQLite e devolve a entrada criada com `id` + timestamps.
+7. O cliente recarrega a lista e mostra a nova entrada.
 
 ### Arquivos relevantes
 
 - [`src/main.rs`](src/main.rs) — servidor, rotas, validacao, enums.
 - [`static/index.html`](static/index.html) — estrutura dos campos e datalists.
-- [`static/app.js`](static/app.js) — combobox, fetch, render da lista de matchups, edicao/delete.
+- [`frontend/src/main.ts`](frontend/src/main.ts) — bootstrap, listeners de submit/filtros/lista.
+- [`frontend/src/combobox.ts`](frontend/src/combobox.ts) — `ComboboxController`, popup, filtro fuzzy.
+- [`frontend/src/form.ts`](frontend/src/form.ts) — `readForm`, `fillForm`, `resetForm`, datalists das runas.
+- [`frontend/src/render.ts`](frontend/src/render.ts) — render dos cards da lista.
+- [`frontend/src/api.ts`](frontend/src/api.ts) — wrappers de `fetch` tipados.
+- [`frontend/src/types.ts`](frontend/src/types.ts) — `Matchup`, `EnumsResponse`, `RuneTree`, `MatchupInput` etc.
+- [`frontend/src/dom.ts`](frontend/src/dom.ts) — helpers `$`, `$byId`, `$all`, `fillDatalist`.
+- [`frontend/tsconfig.json`](frontend/tsconfig.json) — config do TypeScript (target ES2022, strict, outDir `../static/js`).
+- [`package.json`](package.json) — scripts `build` e `watch`, dependencia unica `typescript`.
 - [`static/styles.css`](static/styles.css) — visual, incluindo a estilizacao do combobox.
 - [`migrations/`](migrations/) — schema do SQLite.
 
